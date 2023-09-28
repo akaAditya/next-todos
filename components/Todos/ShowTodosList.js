@@ -12,9 +12,9 @@ const ShowTodosList = (props) => {
   return (
     <Fragment>
       <ul>
-        {props.taskList.map((todo, index) => (
+        {props.taskList.map((todo) => (
           <>
-            <li key={Math.random().toFixed(2)}>{todo.tasks}</li>
+            <li key={todo._id}>{todo.tasks}</li>
             <button onClick={() => CompletedTodosHandler(todo.id)}>
               Completed
             </button>

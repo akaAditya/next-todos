@@ -1,11 +1,47 @@
-import ShowTodos from "@/components/Todos/ShowTodos";
+import AddTodos from "@/components/Todos/AddTodos";
+import ShowTodosList from "@/components/Todos/ShowTodosList";
+import { MongoClient } from "mongodb";
 
-const HomePage = () =>{
+const HomePage = (props) =>{
+
+  const ShowEnteredTodos = async (enteredTasks) => {
+    console.log(enteredTasks);
+    const response = await fetch("/api/todo-database", {
+      method: "POST",
+      body: JSON.stringify(enteredTasks),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    console.log(data)
+  };
     return(
         <div>
             <h1>Welcome to Todos</h1>
-            <ShowTodos />
+            <AddTodos onAddTasks={ShowEnteredTodos}/>
+            <ShowTodosList taskList={props.todos}/>
         </div>
     )
 }
+
+export async function getStaticProps() {
+
+    const client = await MongoClient.connect('mongodb+srv://mymailaditya:AfxKwayGSPGxF16h@clusters.n5i7lds.mongodb.net/todos?retryWrites=true&w=majority');
+    const db = client.db();
+    const todosCollection = db.collection("todos");
+    const todos = await todosCollection.find().toArray();
+    console.log(todos)
+    client.close();
+  
+    return {
+      props: {
+        todos: todos.map((todo) => ({
+          tasks: todo.tasks,
+          id: todo._id.toString(),
+        })),
+      },
+      revalidate: 10,
+    };
+  }
 export default HomePage;
