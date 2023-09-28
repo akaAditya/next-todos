@@ -1,12 +1,15 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useState } from "react";
 import CompletedTodos from "./CompletedTodos";
 
 const ShowTodosList = (props) => {
   const [completedTask, setCompletedTask] = useState([]);
-  const CompletedTodosHandler = (id) => {
+  const [taskStatus, setTaskStatus] = useState(true);
+  
+  const CompletedTodosHandler =async (id) => {
     const CompTask = props.taskList.filter((itemId) => itemId.id === id);
     console.log(CompTask, "CompTask");
     setCompletedTask((prev) => [...prev, CompTask]);
+    setTaskStatus((prev) => !prev);
   };
 
   return (
@@ -23,9 +26,8 @@ const ShowTodosList = (props) => {
         ))}
       </ul>
       <div>
-        <CompletedTodos onCompletedTasks={completedTask}/>
+        <CompletedTodos onCompletedTasks={completedTask} />
       </div>
-
     </Fragment>
   );
 };
