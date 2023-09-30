@@ -1,23 +1,31 @@
-import React, { Fragment, useState } from "react";
-import CompletedTodos from "./CompletedTodos";
+import React, { Fragment } from "react";
 
 const ShowTodosList = (props) => {
-  const [completedTask, setCompletedTask] = useState([]);
-  const [taskStatus, setTaskStatus] = useState(true);
-  
-  const CompletedTodosHandler =async (id) => {
-    const CompTask = props.taskList.filter((itemId) => itemId.id === id);
-    console.log(CompTask, "CompTask");
-    setCompletedTask((prev) => [...prev, CompTask]);
-    setTaskStatus((prev) => !prev);
-  };
+  const data = props.taskList.filter((item) => item.status === "incomplete");
 
+  const todosUpdateData = props.taskList.map((todo) => {
+    return {
+      tasks: todo.tasks,
+      status: todo.status,
+    };
+  });
+  const CompletedTodosHandler = async (id) => {
+    const response = await fetch(`/api/todos/${id}`, {
+      method: "PUT",
+      body: JSON.stringify({ ...todosUpdateData, status: "completed" }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    console.log(data, "updated successfully");
+  };
   return (
     <Fragment>
       <ul>
-        {props.taskList.map((todo) => (
+        {data.map((todo) => (
           <>
-            <li key={todo._id}>{todo.tasks}</li>
+            <li key={todo.id}>{todo.tasks}</li>
             <button onClick={() => CompletedTodosHandler(todo.id)}>
               Completed
             </button>
@@ -25,9 +33,6 @@ const ShowTodosList = (props) => {
           </>
         ))}
       </ul>
-      <div>
-        <CompletedTodos onCompletedTasks={completedTask} />
-      </div>
     </Fragment>
   );
 };

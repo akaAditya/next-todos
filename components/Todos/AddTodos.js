@@ -9,7 +9,7 @@ const AddTodos = (props) => {
     const enteredInputTasks = inputTask.current.value;
     const todoData = {
       tasks: enteredInputTasks,
-      completed: false,
+      status: 'incomplete',
     };
     props.onAddTasks(todoData);
   };

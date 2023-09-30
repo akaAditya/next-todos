@@ -12,7 +12,7 @@ function MainNavigation() {
             <Link href='/'>Add Todos</Link>
           </li>
           <li>
-            <Link href='/completed-todos'>Completed Todos</Link>
+            <Link href='/completedtask'>Completed Todos</Link>
           </li>
         </ul>
       </nav>
