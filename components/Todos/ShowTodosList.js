@@ -20,6 +20,14 @@ const ShowTodosList = (props) => {
     const data = await response.json();
     console.log(data, "updated successfully");
   };
+
+  const DeleteTodosHandler = async (id) => {
+    const response = await fetch(`/api/removetodos/${id}`,{
+      method: 'DELETE',
+    })
+    const data = await response.json();
+    console.log(data)
+  }
   return (
     <Fragment>
       <ul>
@@ -29,7 +37,7 @@ const ShowTodosList = (props) => {
             <button onClick={() => CompletedTodosHandler(todo.id)}>
               Completed
             </button>
-            <button>Delete</button>
+            <button onClick={()=>DeleteTodosHandler(todo.id)}>Delete</button>
           </>
         ))}
       </ul>
